@@ -1,0 +1,1244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model assign {
+  user_id     Int
+  course_id   Int
+  delete_flag String    @default("0") @db.Char(1)
+  start_date  DateTime? @db.DateTime(0)
+  end_date    DateTime? @db.DateTime(0)
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([user_id, course_id])
+  @@index([course_id], map: "index1")
+  @@index([delete_flag], map: "index2")
+  @@index([start_date], map: "index3")
+  @@index([end_date], map: "index4")
+  @@index([end_date, start_date], map: "index5")
+  @@index([user_id, delete_flag], map: "index6")
+}
+
+model assign_management {
+  user_id     Int
+  course_id   Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([user_id, course_id])
+  @@index([course_id], map: "index1")
+}
+
+model bulletin_board {
+  remark_id           Int       @id
+  course_id           Int
+  from_user_id        Int
+  to_user_id          Int
+  subject             String    @db.Text
+  body                String    @db.Text
+  attach_folder       String?   @db.VarChar(255)
+  attach_file         String?   @db.VarChar(255)
+  origin_remark_id    Int
+  reply_remark_id     Int
+  remark_date_time    DateTime  @db.DateTime(0)
+  delete_flag         String    @db.Char(1)
+  last_note_date_time DateTime? @db.DateTime(0)
+}
+
+model category_master {
+  category_id       Int       @id
+  category_name     String    @db.VarChar(255)
+  order_no          Int
+  color_pc          String?   @db.VarChar(6)
+  color_mobile_from String?   @db.VarChar(6)
+  color_mobile_to   String?   @db.VarChar(6)
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+
+  @@index([order_no], map: "index1")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model category_total {
+  user_id           Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String? @db.VarChar(255)
+  total_time        Int?
+  completed_count   Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_order_no], map: "index2")
+  @@index([category_order_no], map: "index3")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model category_total_last_month {
+  user_id           Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String? @db.VarChar(255)
+  total_time        Int?
+  completed_count   Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_order_no], map: "index2")
+  @@index([category_order_no], map: "index3")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model category_total_last_month_mandatory {
+  user_id           Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String? @db.VarChar(255)
+  total_time        Int?
+  completed_count   Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_order_no], map: "index2")
+  @@index([category_order_no], map: "index3")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model category_total_mandatory {
+  user_id           Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String? @db.VarChar(255)
+  total_time        Int?
+  completed_count   Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_order_no], map: "index2")
+  @@index([category_order_no], map: "index3")
+  @@ignore
+}
+
+model certification_asset {
+  background_id Int    @id
+  image         String @db.VarChar(255)
+}
+
+model certification_template_master {
+  certification_id   Int       @id @default(0)
+  certification_name String    @db.VarChar(255)
+  make_user_id       Int
+  updata_user_id     Int?
+  background_id      Int?
+  user_id_flag       String    @default("1") @db.Char(1)
+  user_id_x          Int?
+  user_id_y          Int?
+  user_name_flag     String    @default("1") @db.Char(1)
+  user_name_x        Int?
+  user_name_y        Int?
+  course_flag        String    @default("1") @db.Char(1)
+  course_x           Int?
+  course_y           Int?
+  score_flag         String    @default("1") @db.Char(1)
+  score_x            Int?
+  score_y            Int?
+  print_date_flag    String    @default("1") @db.Char(1)
+  print_date_x       Int?
+  print_date_y       Int?
+  entry_date         DateTime  @db.DateTime(0)
+  change_date        DateTime? @db.DateTime(0)
+
+  @@index([make_user_id], map: "index1")
+  @@index([updata_user_id], map: "index2")
+}
+
+model construct {
+  course_id     Int
+  parent_sco_id Int
+  order_no      Int
+  sco_id        Int
+  goal_sco_id   Int?
+  entry_date    DateTime  @db.DateTime(0)
+  change_date   DateTime? @db.DateTime(0)
+
+  @@id([course_id, parent_sco_id, order_no, sco_id])
+  @@index([parent_sco_id], map: "index1")
+  @@index([order_no], map: "index2")
+  @@index([sco_id], map: "index3")
+}
+
+model content_type_master {
+  content_type_id   Int       @id
+  content_type_name String?   @db.VarChar(255)
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model course_complete_count {
+  user_id         Int?
+  level_id        Int?
+  category_id     Int?
+  completed_count Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_id], map: "index2")
+  @@index([category_id], map: "index3")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model course_complete_count_mandatory {
+  user_id         Int?
+  level_id        Int?
+  category_id     Int?
+  completed_count Int?
+
+  @@index([user_id], map: "index1")
+  @@index([level_id], map: "index2")
+  @@index([category_id], map: "index3")
+  @@ignore
+}
+
+model course_info {
+  course_id         Int     @id
+  course_no         String? @db.VarChar(50)
+  course_name       String? @db.VarChar(255)
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String? @db.VarChar(255)
+
+  @@index([level_order_no], map: "index1")
+  @@index([category_order_no], map: "index2")
+  @@index([course_no], map: "index3")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model course_learning_time {
+  user_id           Int?
+  course_id         Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String?   @db.VarChar(255)
+  course_total_time String?   @db.VarChar(10)
+  last_lecture_date DateTime? @db.DateTime(0)
+
+  @@index([user_id], map: "index1")
+  @@index([course_id], map: "index2")
+  @@index([level_id], map: "index3")
+  @@index([category_id], map: "index4")
+  @@index([last_lecture_date], map: "index5")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model course_learning_time_mandatory {
+  user_id           Int?
+  course_id         Int?
+  level_id          Int?
+  category_id       Int?
+  level_order_no    Int?
+  category_order_no Int?
+  category_name     String?   @db.VarChar(255)
+  course_total_time String?   @db.VarChar(10)
+  last_lecture_date DateTime? @db.DateTime(0)
+
+  @@index([user_id], map: "index1")
+  @@index([course_id], map: "index2")
+  @@index([level_id], map: "index3")
+  @@index([category_id], map: "index4")
+  @@index([last_lecture_date], map: "index5")
+  @@ignore
+}
+
+model course_master {
+  course_id              Int       @id
+  course_no              String    @db.VarChar(50)
+  course_name            String    @db.VarChar(255)
+  course_guide           String?   @db.VarChar(255)
+  regist_flag            Int
+  major_category_id      Int?
+  category_id            Int?
+  level_id               Int?
+  course_start_date      DateTime? @db.DateTime(0)
+  course_end_date        DateTime? @db.DateTime(0)
+  course_open            String    @db.Char(1)
+  scorm_ver              String    @db.VarChar(10)
+  manifest_flag          String    @db.Char(1)
+  manifest_path          String?   @db.VarChar(255)
+  certification_id       Int?
+  report_id              Int?
+  hide_score             String    @default("0") @db.Char(1)
+  hide_result            String    @default("0") @db.Char(1)
+  keyword                String?   @db.Text
+  thumbnail_filename     String?   @db.VarChar(255)
+  course_rating_enabled  String?   @default("0") @db.Char(1)
+  new_arrival_start_date DateTime? @db.DateTime(0)
+  new_arrival_end_date   DateTime? @db.DateTime(0)
+  entry_date             DateTime  @db.DateTime(0)
+  change_date            DateTime? @db.DateTime(0)
+
+  @@index([category_id], map: "index1")
+  @@index([level_id], map: "index2")
+  @@index([category_id], map: "indexc1")
+  @@index([level_id], map: "indexc2")
+}
+
+model course_progress {
+  user_id                  Int
+  course_id                Int
+  course_completion_status String    @db.VarChar(15)
+  course_success_status    String?   @db.VarChar(15)
+  course_count             Int
+  course_score             Int?
+  course_total_time        String    @db.VarChar(10)
+  resume                   String?   @db.LongText
+  last_lecture_date        DateTime? @db.DateTime(0)
+  course_complete_date     DateTime? @db.DateTime(0)
+  course_review_1          String?   @default("") @db.Char(1)
+  course_review_2          String?   @default("") @db.Char(1)
+  course_review_3          String?   @default("") @db.Char(1)
+  user_comment             String?   @default("") @db.VarChar(1000)
+  last_rating_date         DateTime? @db.DateTime(0)
+
+  @@id([user_id, course_id])
+  @@index([course_id], map: "index1")
+  @@index([user_id], map: "index2")
+}
+
+model course_theme_master {
+  course_theme_id   Int       @id @default(autoincrement())
+  course_theme_name String    @db.VarChar(25)
+  link_id           Int
+  delivery_type     String    @default("0") @db.Char(1)
+  group_condition   String?   @db.Text
+  start_date        DateTime? @db.DateTime(0)
+  end_date          DateTime? @db.DateTime(0)
+  color             String?   @db.VarChar(6)
+  order_no          Int
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+
+  @@index([course_theme_id, link_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+model favorite_course {
+  user_id    Int
+  course_id  Int
+  entry_date DateTime @db.DateTime(0)
+
+  @@id([user_id, course_id])
+  @@index([course_id], map: "index1")
+}
+
+model featured_course_master {
+  featured_course_id Int       @id @default(autoincrement())
+  course_id          Int
+  delivery_type      String    @default("0") @db.Char(1)
+  group_id           Int?
+  start_date         DateTime? @db.DateTime(0)
+  end_date           DateTime? @db.DateTime(0)
+
+  @@index([course_id], map: "index1")
+  @@index([delivery_type, start_date, end_date], map: "index2")
+  @@index([delivery_type, group_id, start_date, end_date], map: "index3")
+}
+
+model function_type_assign_menu_group {
+  menu_group_id    Int
+  function_type_id Int
+  entry_date       DateTime @db.DateTime(0)
+
+  @@id([menu_group_id, function_type_id])
+  @@index([function_type_id], map: "index1")
+}
+
+model function_type_assign_module {
+  module_id        Int
+  function_type_id Int
+  entry_date       DateTime @db.DateTime(0)
+
+  @@id([module_id, function_type_id])
+  @@index([function_type_id], map: "index1")
+}
+
+model function_type_master {
+  function_type_id     Int       @id
+  function_type_name   String    @db.VarChar(255)
+  function_type_label  String    @db.VarChar(255)
+  function_type_string String?   @db.Text
+  entry_date           DateTime  @db.DateTime(0)
+  change_date          DateTime? @db.DateTime(0)
+}
+
+model group_assign {
+  user_id     Int
+  group_id    Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([user_id, group_id])
+  @@index([group_id], map: "index1")
+}
+
+model group_level_manage {
+  group_id        Int
+  group_parent_id Int
+  group_index     Int
+  entry_date      DateTime  @db.DateTime(0)
+  change_date     DateTime? @db.DateTime(0)
+
+  @@id([group_id, group_parent_id])
+  @@index([group_parent_id], map: "index1")
+}
+
+model group_list {
+  user_id         Int     @id
+  logon           String  @db.VarChar(255)
+  user_name       String? @db.VarChar(512)
+  mailaddress     String? @db.VarChar(255)
+  group_order_no  Int
+  group_name_list String? @db.Text
+
+  @@index([group_order_no], map: "index1")
+  @@index([logon], map: "index2")
+}
+
+model group_master {
+  group_id     Int       @id
+  group_code   String    @db.VarChar(50)
+  group_name   String    @db.VarChar(50)
+  group_string String?   @db.VarChar(255)
+  founder_flag String    @default("0") @db.Char(1)
+  entry_date   DateTime  @db.DateTime(0)
+  change_date  DateTime? @db.DateTime(0)
+
+  @@index([group_code], map: "index1")
+}
+
+model import_log {
+  import_log_id     Int       @id
+  import_type_id    Int
+  user_id           Int
+  import_start_date DateTime  @db.DateTime(0)
+  import_end_date   DateTime? @db.DateTime(0)
+}
+
+model import_log_details {
+  import_log_id Int
+  details_no    Int
+  message       String   @db.VarChar(255)
+  entry_date    DateTime @db.DateTime(0)
+
+  @@id([import_log_id, details_no])
+  @@index([details_no], map: "index1")
+}
+
+model import_type_master {
+  import_type_id          Int      @id
+  import_type_name        String   @db.VarChar(50)
+  import_type_description String?  @db.VarChar(255)
+  entry_date              DateTime @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model individual_detail {
+  user_id      Int
+  total_status Int
+  total_count  Int
+  total_time   Int
+
+  @@index([user_id], map: "index1")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model individual_detail_last_month {
+  user_id      Int
+  total_status Int
+  total_count  Int
+  total_time   Int
+
+  @@index([user_id], map: "index1")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model individual_detail_last_month_mandatory {
+  user_id      Int
+  total_status Int
+  total_count  Int
+  total_time   Int
+
+  @@index([user_id], map: "index1")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model individual_detail_mandatory {
+  user_id      Int
+  total_status Int
+  total_count  Int
+  total_time   Int
+
+  @@index([user_id], map: "index1")
+  @@ignore
+}
+
+model information {
+  user_id             Int
+  entry_date          DateTime  @db.DateTime(0)
+  order_no            Int
+  logon               String?   @db.VarChar(255)
+  subject             String?   @db.VarChar(255)
+  body                String?   @db.Text
+  delivery_type       String    @default("0") @db.Char(1)
+  group_condition     String?   @db.Text
+  public_date         DateTime  @db.DateTime(0)
+  start_date          DateTime? @db.DateTime(0)
+  end_date            DateTime? @db.DateTime(0)
+  delete_flag         String    @default("0") @db.Char(1)
+  important_flag      String    @default("0") @db.Char(1)
+  most_important_flag String    @default("0") @db.Char(1)
+
+  @@id([user_id, entry_date])
+  @@index([entry_date], map: "index1")
+  @@index([order_no], map: "index2")
+  @@index([start_date], map: "index3")
+  @@index([end_date], map: "index4")
+}
+
+model items {
+  user_id          Int
+  course_id        Int
+  sco_id           Int
+  entry_count      Int
+  id               String?   @db.VarChar(255)
+  response_date    String?   @db.VarChar(10)
+  response_time    String?   @db.VarChar(8)
+  type             String?   @db.VarChar(15)
+  correct_response String?   @db.VarChar(255)
+  user_response    String?   @db.Text
+  result           String?   @db.VarChar(15)
+  weighting        Float?    @db.Float
+  latency          String?   @db.VarChar(15)
+  objectives_id    String?   @db.Text
+  description      String?   @db.VarChar(250)
+  sentence         String?   @db.Text
+  change_date      DateTime? @db.DateTime(0)
+
+  @@id([user_id, course_id, sco_id, entry_count])
+  @@index([course_id], map: "index1")
+  @@index([sco_id], map: "index2")
+  @@index([entry_count], map: "index3")
+}
+
+model learner_preference {
+  user_id     Int
+  course_id   Int
+  audio_level Int?
+  language    String?  @db.VarChar(250)
+  speed       Int?
+  caption     String?  @db.VarChar(10)
+  change_date DateTime @db.DateTime(0)
+
+  @@id([user_id, course_id])
+  @@index([course_id], map: "index1")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model learning_detail {
+  user_id                  Int?
+  course_id                Int?
+  course_total_status      String?   @db.VarChar(10)
+  course_count             Int?
+  course_score             Int?
+  course_total_time        String?   @db.VarChar(10)
+  course_last_lecture_date DateTime? @db.DateTime(0)
+  start_date               DateTime? @db.DateTime(0)
+  end_date                 DateTime? @db.DateTime(0)
+  sco_id                   Int?
+  sco_name                 String?   @db.VarChar(255)
+  url                      String?   @db.VarChar(255)
+  total_status             String?   @db.VarChar(10)
+  lecture_count            Int?
+  raw_score                Float?    @db.Float
+  max_score                Float?    @db.Float
+  total_time               String?   @db.VarChar(10)
+  last_lecture_date        DateTime? @db.DateTime(0)
+  order_no                 Int?
+
+  @@index([user_id], map: "index1")
+  @@index([order_no], map: "index2")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model learning_detail_mandatory {
+  user_id                  Int?
+  course_id                Int?
+  course_total_status      String?   @db.VarChar(10)
+  course_count             Int?
+  course_score             Int?
+  course_total_time        String?   @db.VarChar(10)
+  course_last_lecture_date DateTime? @db.DateTime(0)
+  start_date               DateTime? @db.DateTime(0)
+  end_date                 DateTime? @db.DateTime(0)
+  sco_id                   Int?
+  sco_name                 String?   @db.VarChar(255)
+  url                      String?   @db.VarChar(255)
+  total_status             String?   @db.VarChar(10)
+  lecture_count            Int?
+  raw_score                Float?    @db.Float
+  max_score                Float?    @db.Float
+  total_time               String?   @db.VarChar(10)
+  last_lecture_date        DateTime? @db.DateTime(0)
+  order_no                 Int?
+
+  @@index([user_id], map: "index1")
+  @@index([order_no], map: "index2")
+  @@ignore
+}
+
+model learning_log {
+  user_id         Int
+  course_id       Int
+  sco_id          Int
+  initialize_time DateTime  @db.DateTime(0)
+  finish_time     DateTime? @db.DateTime(0)
+  logon           String?   @db.VarChar(255)
+  course_name     String?   @db.VarChar(255)
+  sco_name        String?   @db.VarChar(255)
+  category_name   String?   @db.VarChar(255)
+  course_no       String?   @db.VarChar(50)
+  folder_name     String?   @db.VarChar(255)
+
+  @@id([user_id, course_id, sco_id, initialize_time])
+  @@index([course_id], map: "index1")
+  @@index([sco_id], map: "index2")
+  @@index([initialize_time], map: "index3")
+}
+
+model level_master {
+  level_id    Int       @id
+  level_name  String    @db.VarChar(255)
+  star_num    Int?
+  order_no    Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@index([order_no], map: "index1")
+}
+
+model link_category_assign {
+  link_id                  Int       @id
+  major_category_condition String?   @db.Text
+  level_condition          String?   @db.Text
+  genre_condition          String?   @db.Text
+  entry_date               DateTime  @db.DateTime(0)
+  change_date              DateTime? @db.DateTime(0)
+}
+
+model link_course_assign {
+  link_id     Int
+  course_id   Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([link_id, course_id])
+}
+
+model link_master {
+  link_id       Int       @id @default(autoincrement())
+  link_code     String    @db.VarChar(30)
+  link_name     String    @db.VarChar(30)
+  link_guide    String?   @db.VarChar(128)
+  identifier    String    @db.VarChar(30)
+  delivery_type String    @default("0") @db.Char(1)
+  entry_date    DateTime  @db.DateTime(0)
+  change_date   DateTime? @db.DateTime(0)
+
+  @@index([link_code], map: "index1")
+  @@index([identifier], map: "index2")
+}
+
+model lms_comments {
+  course_id     Int     @default(0)
+  sco_id        Int     @default(0)
+  lms_count     Int     @default(0)
+  lms_comment   String? @db.Text
+  lms_location  String? @db.VarChar(250)
+  lms_timestamp String? @db.VarChar(25)
+
+  @@id([course_id, sco_id, lms_count])
+  @@index([sco_id], map: "index1")
+  @@index([lms_count], map: "index2")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model lms_info {
+  default_max           Int
+  default_comp          Int
+  default_min           Int
+  default_url           String  @db.VarChar(255)
+  default_screen_width  Int
+  default_screen_height Int
+  default_thema_id      Int     @default(1)
+  limit_weekday         Int     @default(0)
+  limit_saturday        Int     @default(0)
+  limit_sunday          Int     @default(0)
+  limit_regist_user     Int     @default(0)
+  password_change       String  @default("1") @db.Char(1)
+  password_forget       String  @default("1") @db.Char(1)
+  my_user_id            String  @default("0") @db.Char(1)
+  mail_from             String? @db.VarChar(255)
+  mail_subject          String  @db.VarChar(255)
+  mail_body             String  @db.Text
+  store_login_info      String  @default("0") @db.Char(1)
+  login_limit_flag      String  @default("0") @db.Char(1)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model login_limit_management {
+  user_id               Int       @id
+  password_failed_count Int       @default(1)
+  password_failed_time  DateTime? @db.DateTime(0)
+  lock_start_time       DateTime? @db.DateTime(0)
+}
+
+model mail_sending_history {
+  mail_sending_history_id Int      @id
+  course_id               Int
+  user_id                 Int
+  course_name             String?  @db.VarChar(255)
+  logon                   String?  @db.VarChar(255)
+  user_name               String   @db.VarChar(100)
+  mail_template_name      String   @db.VarChar(255)
+  subject                 String   @db.VarChar(255)
+  body                    String   @db.Text
+  condition_status        String?  @db.VarChar(255)
+  condition_role          String?  @db.VarChar(255)
+  condition_group         String?  @db.VarChar(255)
+  send_date               DateTime @db.DateTime(0)
+  send_type               String   @default("0") @db.Char(1)
+
+  @@index([user_id], map: "index1")
+}
+
+model mail_sending_reserve {
+  mail_sending_reserve_id Int       @id @default(autoincrement())
+  reserve_date            DateTime  @db.DateTime(0)
+  create_user_id          Int
+  course_id               Int
+  mail_template_id        Int
+  status_condition        String?   @db.Text
+  role_condition          String?   @db.Text
+  group_condition         String?   @db.Text
+  login_stop_condition    String    @default("0") @db.Char(1)
+  send_complete           String    @default("0") @db.Char(1)
+  entry_date              DateTime  @db.DateTime(0)
+  change_date             DateTime? @db.DateTime(0)
+
+  @@index([reserve_date], map: "index1")
+  @@index([create_user_id], map: "index2")
+}
+
+model mail_template {
+  mail_template_id   Int       @id
+  mail_template_name String    @db.VarChar(255)
+  mail_subject       String    @db.VarChar(255)
+  mail_body          String    @db.Text
+  mail_explanation   String    @db.VarChar(255)
+  user_id            Int
+  logon              String?   @db.VarChar(255)
+  entry_date         DateTime  @db.DateTime(0)
+  change_date        DateTime? @db.DateTime(0)
+
+  @@index([user_id], map: "index1")
+}
+
+model mail_to_history {
+  mail_sending_history_id Int
+  mail_to_history_id      Int
+  mail_to_logon           String?   @db.VarChar(255)
+  mail_to_user_name       String    @db.VarChar(255)
+  send_date               DateTime? @db.DateTime(0)
+
+  @@id([mail_sending_history_id, mail_to_history_id])
+  @@index([mail_to_history_id], map: "index1")
+}
+
+model major_category_master {
+  major_category_id    Int       @id
+  major_category_name  String    @db.VarChar(255)
+  major_category_guide String?   @db.VarChar(128)
+  order_no             Int
+  thumbnail_filename   String?   @db.VarChar(255)
+  entry_date           DateTime  @db.DateTime(0)
+  change_date          DateTime? @db.DateTime(0)
+}
+
+model mandatory_course {
+  group_id            Int
+  course_id           Int
+  learning_limit_date DateTime  @db.DateTime(0)
+  entry_date          DateTime  @db.DateTime(0)
+  change_date         DateTime? @db.DateTime(0)
+
+  @@id([group_id, course_id])
+  @@index([course_id], map: "index1")
+}
+
+model menu_construct {
+  menu_id    Int
+  module_id  Int
+  order_no   Int
+  entry_date DateTime @db.DateTime(0)
+
+  @@id([menu_id, module_id, order_no])
+  @@index([module_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model menu_construct_wk {
+  user_id    Int
+  menu_id    Int
+  module_id  Int
+  order_no   Int
+  entry_date DateTime @db.DateTime(0)
+
+  @@id([user_id, menu_id, module_id, order_no])
+  @@index([module_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+model menu_group_construct {
+  menu_group_id Int
+  menu_id       Int
+  order_no      Int
+  entry_date    DateTime @db.DateTime(0)
+
+  @@id([menu_group_id, menu_id, order_no])
+  @@index([menu_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model menu_group_construct_wk {
+  user_id       Int
+  menu_group_id Int
+  menu_id       Int
+  order_no      Int
+  entry_date    DateTime @db.DateTime(0)
+
+  @@id([user_id, menu_group_id, menu_id, order_no])
+  @@index([menu_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+model menu_group_master {
+  menu_group_id     Int       @id
+  menu_group_label  String    @db.VarChar(255)
+  menu_group_string String?   @db.Text
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+}
+
+model menu_master {
+  menu_id         Int       @id
+  menu_label      String    @db.VarChar(255)
+  menu_image_path String    @db.VarChar(255)
+  menu_string     String?   @db.Text
+  entry_date      DateTime  @db.DateTime(0)
+  change_date     DateTime? @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model menu_master_wk {
+  user_id         Int
+  menu_id         Int
+  menu_label      String    @db.VarChar(255)
+  menu_image_path String    @db.VarChar(255)
+  menu_string     String?   @db.Text
+  entry_date      DateTime  @db.DateTime(0)
+  change_date     DateTime? @db.DateTime(0)
+
+  @@id([user_id, menu_id])
+}
+
+model module_master {
+  module_id     Int       @id
+  module_name   String    @db.VarChar(255)
+  module_label  String    @db.VarChar(255)
+  module_path   String    @db.VarChar(255)
+  module_string String?   @db.Text
+  module_help   Int
+  entry_date    DateTime  @db.DateTime(0)
+  change_date   DateTime? @db.DateTime(0)
+}
+
+model new_arrival_course {
+  course_id    Int       @id
+  from_viewing DateTime? @db.DateTime(0)
+  end_viewing  DateTime? @db.DateTime(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model operation_log {
+  rec_date     DateTime @db.DateTime(0)
+  log_id       Int
+  logon        String?  @db.VarChar(255)
+  target_logon String?  @db.VarChar(255)
+  course_no    String?  @db.VarChar(50)
+  sco_folder   String?  @db.VarChar(255)
+  group_code   String?  @db.VarChar(50)
+  group_name   String?  @db.VarChar(50)
+  file_name    String?  @db.VarChar(255)
+  keyword      String?  @db.Text
+  operation    String?  @db.VarChar(10)
+
+  @@index([rec_date], map: "index1")
+  @@index([log_id], map: "index2")
+  @@ignore
+}
+
+model precondition_course {
+  course_id     Int
+  pre_course_id Int
+  entry_date    DateTime  @db.DateTime(0)
+  change_date   DateTime? @db.DateTime(0)
+
+  @@id([course_id, pre_course_id])
+  @@index([pre_course_id], map: "index1")
+}
+
+model precondition_sco {
+  course_id   Int
+  sco_id      Int
+  pre_sco_id  Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([course_id, sco_id, pre_sco_id])
+  @@index([sco_id], map: "index1")
+  @@index([pre_sco_id], map: "index2")
+}
+
+model reading_log {
+  info_user_id    Int
+  info_entry_date DateTime @db.DateTime(0)
+  read_user_id    Int
+  reading_date    DateTime @db.DateTime(0)
+
+  @@id([info_user_id, info_entry_date, read_user_id])
+}
+
+model recommend_course {
+  group_id    Int
+  course_id   Int
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+
+  @@id([group_id, course_id])
+  @@index([course_id], map: "index1")
+}
+
+model report_group_assign {
+  user_id         Int
+  report_group_id Int
+  entry_date      DateTime  @db.DateTime(0)
+  change_date     DateTime? @db.DateTime(0)
+
+  @@id([user_id, report_group_id])
+  @@index([report_group_id], map: "index1")
+}
+
+model report_group_master {
+  report_group_id   Int       @id @default(autoincrement())
+  group_parent_id   Int
+  report_group_name String    @db.VarChar(50)
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+
+  @@index([report_group_id, group_parent_id], map: "index1")
+}
+
+model report_output_user {
+  user_id     Int       @id
+  output_date DateTime? @db.DateTime(0)
+}
+
+model report_template {
+  report_id                           Int       @id @default(0)
+  report_name                         String    @db.VarChar(255)
+  report_type_id                      Int
+  make_user_id                        Int
+  updata_user_id                      Int?
+  full_name_flag                      String?   @default("0") @db.Char(1)
+  course_name_flag                    String?   @default("0") @db.Char(1)
+  sco_name_flag                       String?   @default("0") @db.Char(1)
+  course_completion_status_flag       String?   @default("0") @db.Char(1)
+  course_success_status_flag          String?   @default("0") @db.Char(1)
+  course_count_flag                   String?   @default("0") @db.Char(1)
+  course_score_flag                   String?   @default("0") @db.Char(1)
+  course_total_time_flag              String?   @default("0") @db.Char(1)
+  last_lecture_date_flag              String?   @default("0") @db.Char(1)
+  start_date_flag                     String?   @default("0") @db.Char(1)
+  end_date_flag                       String?   @default("0") @db.Char(1)
+  course_start_date_flag              String?   @default("0") @db.Char(1)
+  course_end_date_flag                String?   @default("0") @db.Char(1)
+  user_id_count_flag                  String?   @default("0") @db.Char(1)
+  course_completion_status_count_flag String?   @default("0") @db.Char(1)
+  course_success_status_count_flag    String?   @default("0") @db.Char(1)
+  course_average_flag                 String?   @default("0") @db.Char(1)
+  id_flag                             String?   @default("0") @db.Char(1)
+  type_flag                           String?   @default("0") @db.Char(1)
+  correct_response_flag               String?   @default("0") @db.Char(1)
+  user_response_flag                  String?   @default("0") @db.Char(1)
+  result_flag                         String?   @default("0") @db.Char(1)
+  latency_flag                        String?   @default("0") @db.Char(1)
+  response_date_flag                  String?   @default("0") @db.Char(1)
+  response_time_flag                  String?   @default("0") @db.Char(1)
+  course_sco_name_flag                String?   @default("0") @db.Char(1)
+  login_id_flag                       String?   @default("0") @db.Char(1)
+  mailaddress_flag                    String?   @default("0") @db.Char(1)
+  sentence_flag                       String?   @default("0") @db.Char(1)
+  entry_date                          DateTime  @db.DateTime(0)
+  change_date                         DateTime? @db.DateTime(0)
+
+  @@index([make_user_id], map: "index1")
+  @@index([updata_user_id], map: "index2")
+}
+
+model report_type_master {
+  report_type_id    Int       @id
+  report_type_name  String    @db.VarChar(255)
+  report_url        String    @db.VarChar(255)
+  report_type_guide String?   @db.VarChar(255)
+  entry_date        DateTime  @db.DateTime(0)
+  change_date       DateTime? @db.DateTime(0)
+}
+
+model role_construct {
+  role_id       Int
+  menu_group_id Int
+  order_no      Int
+  entry_date    DateTime @db.DateTime(0)
+
+  @@id([role_id, menu_group_id, order_no])
+  @@index([menu_group_id], map: "index1")
+  @@index([order_no], map: "index2")
+}
+
+model role_master {
+  role_id     Int       @id
+  role_name   String    @db.VarChar(50)
+  entry_date  DateTime  @db.DateTime(0)
+  change_date DateTime? @db.DateTime(0)
+}
+
+model sco_master {
+  sco_id           Int       @id
+  sco_type         Int
+  content_type_id  Int
+  sco_name         String    @db.VarChar(255)
+  sco_guide        String?   @db.VarChar(255)
+  enabled_pc       String    @default("1") @db.Char(1)
+  enabled_sf       String    @default("0") @db.Char(1)
+  url              String?   @db.VarChar(255)
+  url_sf           String?   @db.VarChar(255)
+  launch           String?   @db.VarChar(255)
+  lecture_time_min Int
+  max_score        Int
+  mastery_score    Int
+  min_score        Int
+  screen_width     Int
+  screen_height    Int
+  identifier       String?   @db.VarChar(255)
+  isvisible        String    @db.Char(1)
+  entry_date       DateTime  @db.DateTime(0)
+  change_date      DateTime? @db.DateTime(0)
+}
+
+model sco_progress {
+  user_id           Int
+  course_id         Int
+  sco_id            Int
+  completion_status String    @db.VarChar(15)
+  success_status    String?   @db.VarChar(15)
+  progress_measure  Float?    @db.Float
+  lecture_count     Int
+  entry             String    @db.VarChar(10)
+  exit_flag         String?   @db.VarChar(10)
+  location          String?   @db.VarChar(255)
+  raw_score         Float?    @db.Float
+  scaled_score      Float?    @db.Float
+  max_score         Float?    @db.Float
+  min_score         Float?    @db.Float
+  total_time        String    @db.VarChar(10)
+  session_time      String?   @db.VarChar(10)
+  suspend           String?   @db.Text
+  last_lecture_date DateTime? @db.DateTime(0)
+
+  @@id([user_id, course_id, sco_id])
+  @@index([course_id], map: "index1")
+  @@index([sco_id], map: "index2")
+}
+
+model sco_progress_log {
+  rec_date          DateTime @db.DateTime(0)
+  user_id           Int
+  course_id         Int
+  sco_id            Int
+  logon             String?  @db.VarChar(255)
+  course_no         String?  @db.VarChar(50)
+  course_name       String?  @db.VarChar(255)
+  category_name     String?  @db.VarChar(255)
+  sco_name          String?  @db.VarChar(255)
+  sco_folder        String?  @db.VarChar(255)
+  completion_status String?  @db.VarChar(15)
+  success_status    String?  @db.VarChar(15)
+  location          String?  @db.VarChar(255)
+  raw_score         Float?   @db.Float
+  scaled_score      Float?   @db.Float
+  total_time        String?  @db.VarChar(10)
+  session_time      String?  @db.VarChar(10)
+  suspend           String?  @db.Text
+  exec_flag         String?  @db.VarChar(10)
+  store_course_id   Int?     @default(0)
+
+  @@id([rec_date, user_id, course_id, sco_id])
+  @@index([user_id], map: "index1")
+  @@index([course_id], map: "index2")
+  @@index([sco_id], map: "index3")
+}
+
+model scorm_objectives {
+  user_id           Int
+  course_id         Int
+  sco_id            Int
+  entry_count       Int
+  objective_id      String? @db.VarChar(255)
+  success_status    String? @db.VarChar(15)
+  completion_status String? @db.VarChar(15)
+  raw_score         Float?  @db.Float
+  scaled_score      Float?  @db.Float
+  max_score         Float?  @db.Float
+  min_score         Float?  @db.Float
+  progress_measure  Float?  @db.Float
+  description       String? @db.VarChar(250)
+
+  @@id([user_id, course_id, sco_id, entry_count])
+  @@index([course_id], map: "index1")
+  @@index([sco_id], map: "index2")
+  @@index([entry_count], map: "index3")
+}
+
+model thema_master {
+  thema_id          Int     @id
+  thema_name        String  @db.VarChar(255)
+  thema_description String? @db.VarChar(255)
+  thema_folder      String  @db.VarChar(255)
+  thema_style       String  @db.VarChar(255)
+}
+
+model tutorial_master {
+  tutorial_id        Int       @id @default(autoincrement())
+  tutorial_filename  String?   @db.VarChar(255)
+  thumbnail_filename String?   @db.VarChar(255)
+  order_no           Int
+  entry_date         DateTime  @db.DateTime(0)
+  change_date        DateTime? @db.DateTime(0)
+}
+
+model user_comments {
+  user_id        Int
+  course_id      Int
+  sco_id         Int
+  user_count     Int
+  user_comment   String? @db.Text
+  user_location  String? @db.VarChar(250)
+  user_timestamp String? @db.VarChar(25)
+
+  @@id([user_id, course_id, sco_id, user_count])
+  @@index([course_id], map: "index1")
+  @@index([sco_id], map: "index2")
+  @@index([user_count], map: "index3")
+}
+
+model user_logon {
+  user_id      Int       @id
+  session_uuid String    @db.VarChar(35)
+  session_cfid Int
+  course_id    Int?
+  hits         Int
+  last_page    String    @db.VarChar(255)
+  logon_date   DateTime  @db.DateTime(0)
+  change_date  DateTime? @db.DateTime(0)
+}
+
+model user_logon_log {
+  user_id       Int
+  session_uuid  String    @db.VarChar(35)
+  logon_time    DateTime  @db.DateTime(0)
+  logout_time   DateTime? @db.DateTime(0)
+  exaction_flag String?   @db.Char(1)
+  ip            String?   @db.VarChar(255)
+  os            String?   @db.Text
+  flash_ver     String?   @db.Text
+  app_name      String?   @db.Text
+  user_agent    String?   @db.Text
+  logon         String?   @db.VarChar(255)
+  waf_ip        String?   @db.VarChar(255)
+  tls_ver       String?   @db.VarChar(255)
+
+  @@id([user_id, session_uuid, logon_time])
+  @@index([session_uuid], map: "index1")
+  @@index([logon_time], map: "index2")
+}
+
+model user_master {
+  user_id                         Int       @id
+  logon                           String    @db.VarChar(255)
+  password                        String    @db.VarChar(255)
+  last_name                       String    @db.VarChar(255)
+  first_name                      String    @db.VarChar(255)
+  last_name_kana                  String?   @db.VarChar(255)
+  first_name_kana                 String?   @db.VarChar(255)
+  mailaddress                     String?   @db.VarChar(255)
+  management_cord                 String?   @db.VarChar(255)
+  role_id                         Int
+  login_start_date                DateTime? @db.DateTime(0)
+  login_end_date                  DateTime? @db.DateTime(0)
+  login_stop                      String    @default("0") @db.Char(1)
+  user_note                       String?   @db.VarChar(255)
+  user_thema_id                   Int?
+  reset_password_token            String?   @db.VarChar(30)
+  reset_password_publication_date DateTime? @db.DateTime(0)
+  entry_date                      DateTime  @db.DateTime(0)
+  change_date                     DateTime? @db.DateTime(0)
+
+  @@index([logon], map: "index1")
+  @@index([logon], map: "indexc1")
+}
