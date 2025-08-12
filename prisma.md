@@ -53,3 +53,14 @@ These objects have comments defined in the database, which is not yet fully supp
 Run prisma generate to generate Prisma Client.
 
 ```
+
+#### 1️⃣ 索引设计 Checklist（强制执行）
+- [ ] 选择性 > 10%？ `SELECT COUNT(DISTINCT col)/COUNT(*) > 0.1`
+- [ ] JOIN 条件字段是否在索引前列？
+- [ ] WHERE + ORDER BY 是否被索引覆盖？
+- [ ] 是否避免在状态字段（如 delete_flag）建单列索引？
+- [ ] 每个索引是否对应具体查询？
+
+#### 2️⃣ SQL 优化黄金法则
+-- 好索引 = WHERE 条件字段 + JOIN 字段 + ORDER BY 字段
+-- 最佳顺序：等值条件 → 范围条件 → 排序字段

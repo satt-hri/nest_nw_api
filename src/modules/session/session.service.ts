@@ -21,7 +21,7 @@ export class SessionService {
       where: {  user_id: id },
     });
     console.log(result)
-    return JSON.stringify(result);
+    return result;
   }
 
   update(id: number, updateSessionDto: UpdateSessionDto) {

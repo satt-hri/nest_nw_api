@@ -189,24 +189,25 @@ model content_type_master {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model course_complete_count {
-  user_id         Int?
-  level_id        Int?
-  category_id     Int?
+  user_id         Int
+  level_id        Int
+  category_id     Int
   completed_count Int?
 
+  @@id([user_id, level_id, category_id])
   @@index([user_id], map: "index1")
   @@index([level_id], map: "index2")
   @@index([category_id], map: "index3")
-  @@ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model course_complete_count_mandatory {
-  user_id         Int?
-  level_id        Int?
-  category_id     Int?
+  user_id         Int
+  level_id        Int
+  category_id     Int
   completed_count Int?
 
+  @@id([user_id, level_id, category_id])
   @@index([user_id], map: "index1")
   @@index([level_id], map: "index2")
   @@index([category_id], map: "index3")
@@ -230,16 +231,17 @@ model course_info {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model course_learning_time {
-  user_id           Int?
-  course_id         Int?
-  level_id          Int?
-  category_id       Int?
+  user_id           Int
+  course_id         Int
+  level_id          Int
+  category_id       Int
   level_order_no    Int?
   category_order_no Int?
   category_name     String?   @db.VarChar(255)
   course_total_time String?   @db.VarChar(10)
   last_lecture_date DateTime? @db.DateTime(0)
 
+  @@id([user_id, course_id, level_id, category_id])
   @@index([user_id], map: "index1")
   @@index([course_id], map: "index2")
   @@index([level_id], map: "index3")
@@ -250,16 +252,17 @@ model course_learning_time {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model course_learning_time_mandatory {
-  user_id           Int?
-  course_id         Int?
-  level_id          Int?
-  category_id       Int?
+  user_id           Int
+  course_id         Int
+  level_id          Int
+  category_id       Int
   level_order_no    Int?
   category_order_no Int?
   category_name     String?   @db.VarChar(255)
   course_total_time String?   @db.VarChar(10)
   last_lecture_date DateTime? @db.DateTime(0)
 
+  @@id([user_id, course_id, level_id, category_id])
   @@index([user_id], map: "index1")
   @@index([course_id], map: "index2")
   @@index([level_id], map: "index3")
